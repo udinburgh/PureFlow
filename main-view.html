@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main View - Perhitungan Debit Air</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+    <div id="user-input"></div>
+    <div id="calculator"></div>
+    <div id="statistik"></div>
+    <div id="geolokasi"></div>
+    <div id="footer"></div>
+    <script>
+      async function loadView(id, file) {
+        const res = await fetch(file);
+        const html = await res.text();
+        document.getElementById(id).innerHTML = html;
+      }
+      loadView("header", "views/header.html");
+      loadView("user-input", "views/user-input.html");
+      loadView("calculator", "views/calculator.html");
+      loadView("statistik", "views/statistik.html");
+      loadView("geolokasi", "views/geolokasi.html");
+      loadView("footer", "views/footer.html");
+    </script>
+    <script src="main.js"></script>
+  </body>
+</html>

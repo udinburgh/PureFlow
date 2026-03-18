@@ -10,7 +10,16 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// gunakan routes
+// route default untuk root path "/"
+app.get('/', (req, res) => {
+  res.json({
+    status: 'Backend PureFlow Aktif!',
+    server: `http://localhost:${PORT}`,
+    waktu: new Date().toLocaleString()
+  });
+});
+
+// gunakan routes untuk debit
 app.use('/api/debit', debitRoutes);
 
 app.listen(PORT, () => {

@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: PureFlow API
+  version: 1.0.0
+  description: Dokumentasi API untuk backend PureFlow
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/debit:
+    post:
+      summary: Hitung debit dan simpan ke DB
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                volume:
+                  type: number
+                  example: 100
+                waktu:
+                  type: number
+                  example: 20
+      responses:
+        '200':
+          description: Debit berhasil dihitung dan disimpan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  debit:
+                    type: number
+                  status:
+                    type: string
+                  saved:
+                    type: boolean
+        '400':
+          description: Input tidak valid
+  /api/debit/statistik:
+    get:
+      summary: Ambil semua data debit dan statistik
+      responses:
+        '200':
+          description: Statistik debit
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalData:
+                    type: number
+                  rataDebit:
+                    type: number
+                  lokasi:
+                    type: array
+                    items:
+                      type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        volume:
+                          type: number
+                        waktu:
+                          type: number
+                        debit:
+                          type: number
+                        createdAt:
+                          type: string

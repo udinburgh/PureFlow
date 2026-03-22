@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose'); // import mongoose
 
 const debitRoutes = require('./routes/debitRoutes');
 
@@ -9,6 +10,14 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// koneksi ke MongoDB
+mongoose.connect('mongodb://127.0.0.1:27017/pureflow', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB Connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 // route default untuk root path "/"
 app.get('/', (req, res) => {

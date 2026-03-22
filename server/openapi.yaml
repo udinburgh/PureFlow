@@ -2,13 +2,12 @@ openapi: 3.0.0
 info:
   title: PureFlow API
   version: 1.0.0
-  description: Dokumentasi API untuk backend PureFlow
 
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:3000/api
 
 paths:
-  /api/debit:
+  /debit:
     post:
       summary: Hitung debit dan simpan ke DB
       requestBody:
@@ -20,55 +19,48 @@ paths:
               properties:
                 volume:
                   type: number
-                  example: 100
                 waktu:
                   type: number
-                  example: 20
+                lokasi:
+                  type: string
       responses:
         '200':
-          description: Debit berhasil dihitung dan disimpan
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  debit:
-                    type: number
-                  status:
-                    type: string
-                  saved:
-                    type: boolean
-        '400':
-          description: Input tidak valid
-  /api/debit/statistik:
+          description: Debit berhasil dihitung
+
+  /debit/statistik:
     get:
       summary: Ambil semua data debit dan statistik
       responses:
         '200':
           description: Statistik debit
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  totalData:
-                    type: number
-                  rataDebit:
-                    type: number
-                  lokasi:
-                    type: array
-                    items:
-                      type: string
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        volume:
-                          type: number
-                        waktu:
-                          type: number
-                        debit:
-                          type: number
-                        createdAt:
-                          type: string
+
+  /debit/estimasi:
+    post:
+      summary: Hitung estimasi konsumsi air
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                durasi:
+                  type: number
+                jenisAlat:
+                  type: string
+      responses:
+        '200':
+          description: Estimasi konsumsi air berhasil dihitung
+
+  /debit/weather:
+    get:
+      summary: Ambil data cuaca dari Weather API
+      parameters:
+        - in: query
+          name: lokasi
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Data cuaca berhasil diambil

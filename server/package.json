@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/udinburgh/PureFlow#readme",
   "dependencies": {
+    "axios": "^1.13.6",
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "express": "^5.2.1",

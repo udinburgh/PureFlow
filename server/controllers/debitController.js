@@ -1,4 +1,6 @@
 const Debit = require('../models/debitModel');
+const Estimasi = require('../models/estimasiModel');
+const Weather = require('../models/weatherModel');
 const axios = require('axios'); // untuk fetch Weather API
 const apiKey = '2b8de4d0ea57a3a3ecac78023750e757'; // API key asli
 

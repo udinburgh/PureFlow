@@ -12,12 +12,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // koneksi ke MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/pureflow', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB Connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect('mongodb://127.0.0.1:27017/pureflow')
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // route default untuk root path "/"
 app.get('/', (req, res) => {

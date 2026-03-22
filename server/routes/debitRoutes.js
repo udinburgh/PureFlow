@@ -8,4 +8,10 @@ router.post('/', debitController.hitungDebit);
 // GET statistik
 router.get('/statistik', debitController.getStatistik);
 
+// POST estimasi konsumsi air
+router.post('/estimasi', debitController.hitungAir);
+
+// GET weather data
+router.get('/weather', debitController.getWeather);
+
 module.exports = router;

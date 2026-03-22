@@ -8,11 +8,11 @@ Jika ingin menjalankan server backend di komputer sendiri:
 
 1. **Clone repository:**
    ```bash
-   git clone [link-repo-kamu]
+   git clone PureFLow
 
 Install dependencies:
 
-Bash
+bash
 npm install
 
 Konfigurasi Environment:
@@ -20,7 +20,7 @@ Pastikan koneksi MongoDB dan API Key Weather sudah terpasang (cek file .env).
 
 Running Server:
 
-Bash
+bash
 npm start
 Server akan berjalan di: http://localhost:3000
 

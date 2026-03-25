@@ -1,4 +1,230 @@
-<!-- geolokasi.html -->
-<section class="geolokasi">
-  <p>Contoh Geolokasi</p>
-</section>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PureFlow - Lokasi & Cuaca</title>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">PureFlow <span class="drop-icon">💧</span></div>
+    </nav>
+
+    <main class="hero-section">
+        <h1>Lokasi & Cuaca</h1>
+        <p class="subtitle">Kondisi lokal yang mempengaruhi ketersediaan air</p>
+
+        <div class="content-wrapper">
+            <div class="card card-weather">
+                <h3>Lokasi & Cuaca</h3>
+                <p class="card-desc">Kondisi lokal yang mempengaruhi ketersediaan air</p>
+                
+                <button id="btn-lokasi" class="btn-primary">Aktifkan layanan lokasi</button>
+
+                <div class="input-group">
+                    <label>Lokasi anda saat ini</label>
+                    <input type="text" placeholder="Masukkan manual" id="input-lokasi">
+                    <small>*Masukkan kota atau kode area ini</small>
+                </div>
+
+                <div class="weather-info-box">
+                    <div class="weather-main">
+                        <span class="weather-icon">💧</span>
+                        <span id="status-cuaca">Cerah Berawan</span>
+                    </div>
+                    
+                    <div class="weather-details">
+                        <div class="detail-item"><span>Suhu:</span> <strong id="suhu"></strong></div>
+                        <div class="detail-item"><span>Kelembapan:</span> <strong id="kelembapan"></strong></div>
+                        <div class="detail-item"><span>Angin:</span> <strong id="angin"></strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-tips">
+                <h3><span class="icon-list">📋</span> Tips Menghemat Air</h3>
+                <p class="card-desc">Praktik harian untuk penggunaan air berkelanjutan</p>
+                
+                <p><strong>Lakukan ini</strong></p>
+                <ul class="tips-list">
+                    <li>Gunakan air secukupnya saat mandi</li>
+                    <li>Matikan keran saat tidak digunakan</li>
+                    <li>Gunakan mesin cuci dengan kapasitas penuh</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, #e0f2fe 0%, #0ea5e9 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 50px;
+    align-items: center;
+}
+
+.logo {
+    color: #0369a1;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+h1 {
+    color: #0369a1;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #0369a1;
+    margin-bottom: 40px;
+}
+
+/* Layout Kartu */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    width: 450px;
+    text-align: left;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    color: #0369a1;
+    margin-bottom: 5px;
+}
+
+.card-desc {
+    font-size: 0.8rem;
+    color: #7dd3fc;
+    margin-bottom: 20px;
+}
+
+/* Button & Input */
+.btn-primary {
+    width: 100%;
+    background-color: #22d3ee;
+    border: none;
+    padding: 12px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0f2fe;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.input-group small {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+/* Weather Display */
+.weather-info-box {
+    margin-top: 20px;
+}
+
+.weather-main {
+    background-color: #e0f2fe;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.weather-details {
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+/* Tips List */
+.tips-list {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.tips-list li {
+    background-color: #e0f2fe;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+</style>
+
+</body>
+</html>
+
+

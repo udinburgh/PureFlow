@@ -27,7 +27,6 @@ exports.getWeather = async (req, res) => {
   }
 };
 
-
 // POST: hitung debit + simpan ke DB
 exports.hitungDebit = async (req, res) => {
   try {
@@ -104,30 +103,6 @@ exports.hitungAir = (req, res) => {
 
     const konsumsi = durasi * debitAlat;
     res.json({ konsumsi, satuan: 'liter', jenisAlat, durasi });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// GET: Weather API (contoh pakai OpenWeather)
-exports.getWeather = async (req, res) => {
-  try {
-    const { lokasi } = req.query; // contoh: ?lokasi=Jakarta
-    const apiKey = '2b8de4d0ea57a3a3ecac78023750e757'; // API key asli
-
-    const response = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=${lokasi}&appid=${apiKey}&units=metric`
-    );
-
-    const data = response.data;
-    const hasil = {
-      lokasi: data.name,
-      kondisi: data.weather[0].description,
-      suhu: data.main.temp,
-      curahHujan: data.rain ? data.rain['1h'] : 0
-    };
-
-    res.json(hasil);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

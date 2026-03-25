@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PureFlow - Statistik Penggunaan</title>
-
+    <title>PureFlow - Lokasi & Cuaca</title>
 </head>
 <body>
 
@@ -12,289 +11,219 @@
         <div class="logo">PureFlow <span class="drop-icon">💧</span></div>
     </nav>
 
-    <main class="container">
-        <header class="stat-header">
-            <h1>statistik</h1>
-            <p>Analisis pola konsumsi Anda</p>
-            <p class="sub-text">Manajemen air berbasis data</p>
-        </header>
+    <main class="hero-section">
+        <h1>Lokasi & Cuaca</h1>
+        <p class="subtitle">Kondisi lokal yang mempengaruhi ketersediaan air</p>
 
-        <div class="summary-grid">
-            <div class="card-mini">
-                <span>total terlacak</span>
-                <h2 id="total-terlacak">72.0 L</h2>
-                <small>selama 1 hari</small>
-            </div>
-            <div class="card-mini">
-                <span>rata-rata harian</span>
-                <h2 id="rata-rata">72.0 L</h2>
-                <small>rata-rata harian</small>
-            </div>
-            <div class="card-mini">
-                <span>Tren Mingguan</span>
-                <h2 class="trend-red">+0.0%</h2>
-                <small>vs. minggu sebelumnya</small>
-            </div>
-        </div>
+        <div class="content-wrapper">
+            <div class="card card-weather">
+                <h3>Lokasi & Cuaca</h3>
+                <p class="card-desc">Kondisi lokal yang mempengaruhi ketersediaan air</p>
+                
+                <button id="btn-lokasi" class="btn-primary">Aktifkan layanan lokasi</button>
 
-        <div class="main-grid">
-            <div class="card chart-box">
-                <h3>Penggunaan per Perangkat</h3>
-                <p class="card-subtitle">Retribusi konsumsi berkelanjutan air</p>
-                <div class="chart-container">
-                    <canvas id="pieChart"></canvas>
+                <div class="input-group">
+                    <label>Lokasi anda saat ini</label>
+                    <input type="text" placeholder="Masukkan manual" id="input-lokasi">
+                    <small>*Masukkan kota atau kode area ini</small>
+                </div>
+
+                <div class="weather-info-box">
+                    <div class="weather-main">
+                        <span class="weather-icon">💧</span>
+                        <span id="status-cuaca">Cerah Berawan</span>
+                    </div>
+                    
+                    <div class="weather-details">
+                        <div class="detail-item"><span>Suhu:</span> <strong id="suhu"></strong></div>
+                        <div class="detail-item"><span>Kelembapan:</span> <strong id="kelembapan"></strong></div>
+                        <div class="detail-item"><span>Angin:</span> <strong id="angin"></strong></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card table-box">
-                <h3>Detail Perangkat</h3>
-                <p class="card-subtitle">Analisis penggunaan harian</p>
-                <table class="stat-table">
-                    <thead>
-                        <tr>
-                            <th>perangkat</th>
-                            <th>penggunaan</th>
-                            <th>biaya</th>
-                        </tr>
-                    </thead>
-                    <tbody id="device-details">
-                        <tr>
-                            <td>Kran Standar</td>
-                            <td>72.0 L</td>
-                            <td>Rp 250 <span class="delete-icon">🗑️</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="card card-tips">
+                <h3><span class="icon-list">📋</span> Tips Menghemat Air</h3>
+                <p class="card-desc">Praktik harian untuk penggunaan air berkelanjutan</p>
+                
+                <p><strong>Lakukan ini</strong></p>
+                <ul class="tips-list">
+                    <li>Gunakan air secukupnya saat mandi</li>
+                    <li>Matikan keran saat tidak digunakan</li>
+                    <li>Gunakan mesin cuci dengan kapasitas penuh</li>
+                </ul>
             </div>
-        </div>
-
-        <div class="card full-chart">
-            <div class="chart-container-large">
-                <canvas id="lineChart"></canvas>
-            </div>
-        </div>
-
-        <div class="card history-box">
-            <h3>Riwayat Penggunaan</h3>
-            <p class="card-subtitle">Data penggunaan terbaru</p>
-            <table class="stat-table">
-                <thead>
-                    <tr>
-                        <th>Tanggal & Waktu</th>
-                        <th>Perangkat</th>
-                        <th>Durasi</th>
-                        <th>Air Digunakan</th>
-                    </tr>
-                </thead>
-                <tbody id="history-data">
-                    <tr>
-                        <td>28 Mar, 20:30</td>
-                        <td>Kran Standar</td>
-                        <td>5 menit</td>
-                        <td>72.0 L <span class="delete-icon">🗑️</span></td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, #e0f2fe 0%, #0ea5e9 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 50px;
+    align-items: center;
+}
+
+.logo {
+    color: #0369a1;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+h1 {
+    color: #0369a1;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #0369a1;
+    margin-bottom: 40px;
+}
+
+/* Layout Kartu */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    width: 450px;
+    text-align: left;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    color: #0369a1;
+    margin-bottom: 5px;
+}
+
+.card-desc {
+    font-size: 0.8rem;
+    color: #7dd3fc;
+    margin-bottom: 20px;
+}
+
+/* Button & Input */
+.btn-primary {
+    width: 100%;
+    background-color: #22d3ee;
+    border: none;
+    padding: 12px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0f2fe;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.input-group small {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+/* Weather Display */
+.weather-info-box {
+    margin-top: 20px;
+}
+
+.weather-main {
+    background-color: #e0f2fe;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.weather-details {
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+/* Tips List */
+.tips-list {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.tips-list li {
+    background-color: #e0f2fe;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+</style>
+
 </body>
 </html>
 
-<style>
-
-* {
-   margin: 0;
-   padding: 0; 
-   box-sizing: border-box;
-   font-family: 'Segoe UI', sans-serif; 
-  }
-  
-body {
-   background: linear-gradient(180deg, #e0f2fe 0%, #0ea5e9 100%);
-   min-height: 100vh; 
-   padding-bottom: 50px;
-   color: #334155; }
-
-.navbar { 
-   display: flex; 
-   justify-content: space-between; 
-   padding: 20px 50px; 
-   align-items: center; }
-
-.logo {
-   color: #0369a1; 
-   font-weight: bold;
-   font-size: 1.1rem; }
-
-.nav-links {
-   list-style: none; 
-   display: flex;
-   gap: 20px; }
-
-.nav-links a { 
-   text-decoration: none;
-   color: #334155;
-   font-size: 0.8rem; }
-
-.nav-links a.active { 
-  font-weight: bold;
-  border-bottom: 2px solid #0369a1; }
-
-.container { 
-  max-width: 1000px;
-  margin: 0 auto; 
-  padding: 0 20px; 
-  text-align: center; }
-
-.stat-header h1 { 
-   color: #0369a1;
-   font-size: 2.8rem; 
-   margin-top: 20px; }
-
-.stat-header p { 
-   color: #0369a1;
-   font-size: 0.9rem; }
-
-.sub-text {
-   opacity: 0.6; 
-   margin-bottom: 30px; }
-
-.summary-grid {
-   display: flex; 
-   justify-content: center; 
-   gap: 15px; 
-   margin-bottom: 25px; }
-
-.card-mini {
-   background: white;
-   padding: 20px;
-   border-radius: 20px; 
-   width: 220px; 
-   text-align: left;
-   box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
-.card-mini span { 
-   font-size: 0.7rem;
-   font-weight: bold; 
-   color: #64748b; 
-   text-transform: uppercase; }
-
-.card-mini h2 { 
-   color: #2563eb;
-   font-size: 1.8rem;
-   margin: 5px 0; }
-
-.card-mini .trend-red { 
-   color: #ef4444; }
-
-.main-grid { 
-   display: grid;
-   grid-template-columns: 1fr 1fr; 
-   gap: 20px; 
-   margin-bottom: 20px; }
-
-.card {
-   background: white;
-   border-radius: 25px; 
-   padding: 25px;
-   text-align: left;
-   box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-
-.card h3 {
-   color: #0369a1;
-   font-size: 1rem; }
-
-.card-subtitle { 
-   color: #94a3b8; 
-   font-size: 0.7rem; 
-   margin-bottom: 20px; }
-
-.stat-table {
-   width: 100%; 
-   border-collapse: collapse; 
-   font-size: 0.85rem; }
-
-.stat-table th { 
-   text-align: left;
-   padding: 10px 5px;
-   color: #64748b; 
-   border-bottom: 1px solid #f1f5f9; }
-
-.stat-table td { 
-   padding: 12px 5px;
-   border-bottom: 1px solid #f8fafc; }
-
-.delete-icon {
-   color: #ef4444; 
-   cursor: pointer;
-   float: right; }
-
-.chart-container {
-   position: relative; 
-   height: 200px; 
-   width: 100%; 
-   display: flex;
-   justify-content: center; }
-   
-.chart-container-large {
-   height: 300px; 
-   width: 100%; }
-
-</style>
-
-<script>
-// 1. Inisialisasi Grafik Lingkaran (Pie Chart)
-const ctxPie = document.getElementById('pieChart').getContext('2d');
-new Chart(ctxPie, {
-    type: 'doughnut', // Menggunakan tipe doughnut agar lebih modern
-    data: {
-        labels: ['Kran', 'Shower', 'Mesin Cuci'],
-        datasets: [{
-            data: [70, 20, 10], // Data dummy (bisa dihubungkan ke kalkulator)
-            backgroundColor: ['#38bdf8', '#818cf8', '#c084fc'],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { position: 'bottom' }
-        },
-        cutout: '70%'
-    }
-});
-
-// 2. Inisialisasi Grafik Garis (Line Chart)
-const ctxLine = document.getElementById('lineChart').getContext('2d');
-new Chart(ctxLine, {
-    type: 'line',
-    data: {
-        labels: ['18 Mar', '19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar'],
-        datasets: [{
-            label: 'Penggunaan Air (Liter)',
-            data: [10, 5, 8, 12, 7, 15, 72],
-            borderColor: '#0ea5e9',
-            backgroundColor: 'rgba(14, 165, 233, 0.1)',
-            fill: true,
-            tension: 0.4, // Membuat garis melengkung halus
-            pointRadius: 5,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#0ea5e9'
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: { beginAtZero: true, grid: { display: false } },
-            x: { grid: { display: false } }
-        },
-        plugins: {
-            legend: { display: false }
-        }
-    }
-});
-</script>

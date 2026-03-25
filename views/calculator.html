@@ -1,3 +1,14 @@
+<!-- Dropdown perangkat -->
+<select id="device">
+  <option value="">-- Pilih --</option>
+  <option value="Keran Hemat Air">Keran Hemat Air (6 L/menit)</option>
+  <option value="Keran Standar">Keran Standar (9 L/menit)</option>
+  <option value="Shower">Shower (12 L/menit)</option>
+  <option value="Mesin Cuci">Mesin Cuci (15 L/menit)</option>
+  <option value="Dispenser">Dispenser (5 L/menit)</option>
+  <option value="Sprinkler">Sprinkler (20 L/menit)</option>
+</select>
+
 <!-- calculator-logic -->
 <script>
   const form = document.getElementById("waterForm");
@@ -23,33 +34,55 @@
     deviceSelect.disabled = false;
     deviceSelect.classList.remove("disabled");
     hint.innerText = "Pilih perangkat atau gunakan debit manual";
-
     document.getElementById("resultBox").classList.remove("show");
   });
 
-  // Hitung
-  form.addEventListener("submit", function(e){
+  // Hitung (integrasi ke backend)
+  form.addEventListener("submit", async function(e){
     e.preventDefault();
 
     const duration = document.getElementById("duration").value;
-    const selectedFlow = deviceSelect.value;
+    const selectedDevice = deviceSelect.value;
     const customFlow = customInput.value;
 
-    const flow = customFlow ? customFlow : selectedFlow;
+    // Jika user isi custom flow → langsung hitung manual
+    if (customFlow) {
+      const liter = duration * customFlow;
+      const m3 = liter / 1000;
+      const cost = liter * 4;
 
-    if (!flow) {
+      document.getElementById("liter").innerText = liter + " L";
+      document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
+      document.getElementById("cost").innerText = "Rp " + cost;
+      document.getElementById("resultBox").classList.add("show");
+      return;
+    }
+
+    // Kalau pakai dropdown → fetch ke backend
+    if (!selectedDevice) {
       alert("Pilih perangkat atau isi debit air manual!");
       return;
     }
 
-    const liter = duration * flow;
-    const m3 = liter / 1000;
-    const cost = liter * 4;
+    try {
+      const res = await fetch('/api/hitungAir', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ durasi: duration, jenisAlat: selectedDevice })
+      });
+      const data = await res.json();
 
-    document.getElementById("liter").innerText = liter + " L";
-    document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
-    document.getElementById("cost").innerText = "Rp " + cost;
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
 
-    document.getElementById("resultBox").classList.add("show");
+      document.getElementById("liter").innerText = data.konsumsi + " L";
+      document.getElementById("m3").innerText = (data.konsumsi / 1000).toFixed(3) + " m³";
+      document.getElementById("cost").innerText = "Rp " + (data.konsumsi * 4);
+      document.getElementById("resultBox").classList.add("show");
+    } catch (err) {
+      alert("Terjadi error: " + err.message);
+    }
   });
 </script>

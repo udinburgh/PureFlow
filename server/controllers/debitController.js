@@ -85,7 +85,7 @@ exports.getStatistik = async (req, res) => {
   }
 };
 
-// POST: estimasi konsumsi air (keran/shower)
+// POST: estimasi konsumsi air (alat sesuai dropdown kalkulator)
 exports.hitungAir = (req, res) => {
   try {
     const { durasi, jenisAlat } = req.body;
@@ -94,8 +94,18 @@ exports.hitungAir = (req, res) => {
       return res.status(400).json({ error: 'Input tidak valid' });
     }
 
-    const debitMap = { keran: 6, shower: 10 }; // liter per menit
-    const debitAlat = debitMap[jenisAlat.toLowerCase()];
+    // ✅ Mapping lengkap sesuai dropdown calculator.html
+    const debitMap = {
+      "keran hemat air": 6,
+      "keran standar": 9,
+      "shower": 12,
+      "mesin cuci": 15,
+      "dispenser": 5,    // alat baru
+      "sprinkler": 20    // alat baru
+    };
+
+    const key = jenisAlat.toLowerCase();
+    const debitAlat = debitMap[key];
 
     if (!debitAlat) {
       return res.status(400).json({ error: 'Jenis alat tidak dikenali' });

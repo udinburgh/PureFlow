@@ -1,4 +1,68 @@
 <!-- user-input.html -->
-<section class="user-input">
-  <p>Contoh User Input</p>
-</section>
+<main class="hero">
+  <section class="calculator">
+    <h1 class="calculator__title">Kalkulator Aliran Air</h1>
+    <p class="calculator__subtitle">
+      Perkirakan konsumsi air untuk aktivitas rumah tangga
+    </p>
+
+    <form class="form" id="waterForm">
+
+      <!-- DURASI -->
+      <div class="form__group">
+        <label for="duration">Durasi Pemakaian (menit)</label>
+        <input type="number" id="duration" placeholder="Contoh: 10" required />
+        <small class="form__hint">* Lama penggunaan air</small>
+      </div>
+
+      <!-- DEVICE -->
+      <div class="form__group">
+        <label for="device">Pilih Tipe Perangkat</label>
+        <select id="device">
+          <option value="">-- Pilih --</option>
+          <option value="6">Keran Hemat Air (6 L/menit)</option>
+          <option value="9">Keran Standar (9 L/menit)</option>
+          <option value="12">Shower (12 L/menit)</option>
+          <option value="15">Mesin Cuci (15 L/menit)</option>
+        </select>
+        <small id="deviceHint" class="form__hint">
+          Pilih perangkat atau gunakan debit manual
+        </small>
+      </div>
+
+      <!-- CUSTOM FLOW -->
+      <div class="form__group form__group--optional">
+        <label for="customFlow">Debit Air Manual (Opsional)</label>
+        <input type="number" id="customFlow" placeholder="Contoh: 8" />
+        <small class="form__hint">
+          * Jika diisi, akan menggantikan pilihan perangkat
+        </small>
+      </div>
+
+      <!-- ACTION -->
+      <div class="form__actions">
+        <button type="reset" class="btn btn--secondary">Reset</button>
+        <button type="submit" class="btn btn--primary">Hitung</button>
+      </div>
+
+    </form>
+
+    <!-- RESULT -->
+    <section class="result" id="resultBox">
+      <h3>Hasil Perhitungan</h3>
+      <div class="result__item">
+        <span>Penggunaan Air:</span>
+        <strong id="liter">-</strong>
+      </div>
+      <div class="result__item">
+        <span>Dalam Meter Kubik:</span>
+        <strong id="m3">-</strong>
+      </div>
+      <div class="result__item">
+        <span>Perkiraan Biaya:</span>
+        <strong id="cost">-</strong>
+      </div>
+    </section>
+
+  </section>
+</main>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureFlow Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <h1 class="title">Dashboard</h1>
+    <p class="subtitle">Setiap tetes berarti untuk planet kita</p>
+
+    <!-- CARDS -->
+    <section class="cards">
+        <div class="card">
+          <p>Penggunaan Hari Ini</p>
+          <p class="big" id="totalAir">0 L</p>
+      </div>
+
+        <div class="card">
+          <p>Perkiraan Biaya</p>
+          <p class="big" id="biaya">Rp 0</p>
+        </div>
+
+      <div class="card status" id="statusCard">
+        <p>Status</p>
+        <p class="big" id="statusText">-</p>
+      </div>
+
+     </section>
+
+    <!-- CONTENT -->
+    <section class="content">
+
+      <!-- INPUT -->
+      <div class="box">
+        <h3>Catat Penggunaan Air</h3>
+      </div>
+
+      <!-- LOKASI -->
+      <div class="box">
+        <h3>Lokasi & Cuaca</h3>
+
+    
+      </div>
+
+    </section>
+
+    <!-- RIWAYAT -->
+    <section class="history">
+      <h3>Riwayat Penggunaan</h3>
+
+      <div id="emptyState" class="empty-state">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png">
+        <p>Belum ada catatan</p>
+      </div>
+
+      <table id="table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Alat</th>
+            <th>Durasi</th>
+            <th>Air</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+
+    </section>
+
+
+  </main>
+
+</body>

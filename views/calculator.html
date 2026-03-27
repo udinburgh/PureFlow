@@ -1,88 +1,120 @@
-<!-- Dropdown perangkat -->
-<select id="device">
-  <option value="">-- Pilih --</option>
-  <option value="Keran Hemat Air">Keran Hemat Air (6 L/menit)</option>
-  <option value="Keran Standar">Keran Standar (9 L/menit)</option>
-  <option value="Shower">Shower (12 L/menit)</option>
-  <option value="Mesin Cuci">Mesin Cuci (15 L/menit)</option>
-  <option value="Dispenser">Dispenser (5 L/menit)</option>
-  <option value="Sprinkler">Sprinkler (20 L/menit)</option>
-</select>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>PureFlow - Kalkulator Air</title>
+</head>
+<body>
 
-<!-- calculator-logic -->
-<script>
-  const form = document.getElementById("waterForm");
-  const customInput = document.getElementById("customFlow");
-  const deviceSelect = document.getElementById("device");
-  const hint = document.getElementById("deviceHint");
+  <h2>Kalkulator Konsumsi Air</h2>
 
-  // Disable dropdown jika custom diisi
-  customInput.addEventListener("input", function () {
-    if (customInput.value) {
-      deviceSelect.disabled = true;
-      deviceSelect.classList.add("disabled");
-      hint.innerText = "Dinonaktifkan karena menggunakan debit manual";
-    } else {
+  <form id="waterForm">
+    <label>Durasi (menit):</label>
+    <input type="number" id="duration" required>
+
+    <label>Debit manual (L/menit):</label>
+    <input type="number" id="customFlow" placeholder="Isi jika mau manual">
+
+    <p id="deviceHint">Pilih perangkat atau gunakan debit manual</p>
+
+    <!-- Dropdown perangkat -->
+    <select id="device">
+      <option value="">-- Pilih --</option>
+      <option value="Keran Hemat Air">Keran Hemat Air (6 L/menit)</option>
+      <option value="Keran Standar">Keran Standar (9 L/menit)</option>
+      <option value="Shower">Shower (12 L/menit)</option>
+      <option value="Mesin Cuci">Mesin Cuci (15 L/menit)</option>
+      <option value="Dispenser">Dispenser (5 L/menit)</option>
+      <option value="Sprinkler">Sprinkler (20 L/menit)</option>
+    </select>
+
+    <button type="submit">Hitung</button>
+    <button type="reset">Reset</button>
+  </form>
+
+  <!-- Hasil -->
+  <div id="resultBox">
+    <p>Konsumsi: <span id="liter"></span></p>
+    <p>Volume: <span id="m3"></span></p>
+    <p>Biaya: <span id="cost"></span></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("waterForm");
+    const customInput = document.getElementById("customFlow");
+    const deviceSelect = document.getElementById("device");
+    const hint = document.getElementById("deviceHint");
+
+    // Disable dropdown jika custom diisi
+    customInput.addEventListener("input", function () {
+      if (customInput.value) {
+        deviceSelect.disabled = true;
+        deviceSelect.classList.add("disabled");
+        hint.innerText = "Dinonaktifkan karena menggunakan debit manual";
+      } else {
+        deviceSelect.disabled = false;
+        deviceSelect.classList.remove("disabled");
+        hint.innerText = "Pilih perangkat atau gunakan debit manual";
+      }
+    });
+
+    // Reset state
+    form.addEventListener("reset", function () {
       deviceSelect.disabled = false;
       deviceSelect.classList.remove("disabled");
       hint.innerText = "Pilih perangkat atau gunakan debit manual";
-    }
-  });
+      document.getElementById("resultBox").classList.remove("show");
+    });
 
-  // Reset state
-  form.addEventListener("reset", function () {
-    deviceSelect.disabled = false;
-    deviceSelect.classList.remove("disabled");
-    hint.innerText = "Pilih perangkat atau gunakan debit manual";
-    document.getElementById("resultBox").classList.remove("show");
-  });
+    // Hitung (integrasi ke backend)
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
 
-  // Hitung (integrasi ke backend)
-  form.addEventListener("submit", async function(e){
-    e.preventDefault();
+      const duration = document.getElementById("duration").value;
+      const selectedDevice = deviceSelect.value;
+      const customFlow = customInput.value;
 
-    const duration = document.getElementById("duration").value;
-    const selectedDevice = deviceSelect.value;
-    const customFlow = customInput.value;
+      // Jika user isi custom flow → langsung hitung manual
+      if (customFlow) {
+        const liter = duration * customFlow;
+        const m3 = liter / 1000;
+        const cost = liter * 4;
 
-    // Jika user isi custom flow → langsung hitung manual
-    if (customFlow) {
-      const liter = duration * customFlow;
-      const m3 = liter / 1000;
-      const cost = liter * 4;
-
-      document.getElementById("liter").innerText = liter + " L";
-      document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
-      document.getElementById("cost").innerText = "Rp " + cost;
-      document.getElementById("resultBox").classList.add("show");
-      return;
-    }
-
-    // Kalau pakai dropdown → fetch ke backend
-    if (!selectedDevice) {
-      alert("Pilih perangkat atau isi debit air manual!");
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/hitungAir', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ durasi: duration, jenisAlat: selectedDevice })
-      });
-      const data = await res.json();
-
-      if (data.error) {
-        alert(data.error);
+        document.getElementById("liter").innerText = liter + " L";
+        document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
+        document.getElementById("cost").innerText = "Rp " + cost;
+        document.getElementById("resultBox").classList.add("show");
         return;
       }
 
-      document.getElementById("liter").innerText = data.konsumsi + " L";
-      document.getElementById("m3").innerText = (data.konsumsi / 1000).toFixed(3) + " m³";
-      document.getElementById("cost").innerText = "Rp " + (data.konsumsi * 4);
-      document.getElementById("resultBox").classList.add("show");
-    } catch (err) {
-      alert("Terjadi error: " + err.message);
-    }
-  });
-</script>
+      // Kalau pakai dropdown → fetch ke backend
+      if (!selectedDevice) {
+        alert("Pilih perangkat atau isi debit air manual!");
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:3000/api/debit/estimasi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ durasi: duration, jenisAlat: selectedDevice })
+        });
+        const data = await res.json();
+
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        document.getElementById("liter").innerText = data.konsumsi + " L";
+        document.getElementById("m3").innerText = (data.konsumsi / 1000).toFixed(3) + " m³";
+        document.getElementById("cost").innerText = "Rp " + (data.konsumsi * 4);
+        document.getElementById("resultBox").classList.add("show");
+      } catch (err) {
+        alert("Terjadi error: " + err.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

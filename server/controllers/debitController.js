@@ -14,6 +14,8 @@ exports.getWeather = async (req, res) => {
       lokasi: data.name,
       kondisi: data.weather[0].description,
       suhu: data.main.temp,
+      kelembapan: data.main.humidity,   
+      angin: data.wind.speed,           
       curahHujan: data.rain ? data.rain['1h'] : 0
     });
   } catch (error) {

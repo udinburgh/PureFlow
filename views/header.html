@@ -18,3 +18,17 @@
     <a href="#">Lokasi & Cuaca</a>
   </nav>
 </header>
+
+<script>
+  // Opsional: highlight menu aktif berdasarkan halaman
+  const links = document.querySelectorAll('.navbar__menu a');
+  const currentPage = window.location.pathname.split('/').pop();
+  links.forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PureFlow - Kalkulator Air</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar__logo">PureFlow 💧</div>
+  <nav class="navbar__menu">
+    <a href="#Dashboard" class="active">Dashboard</a>
+    <a href="#Kalkulator">Kalkulator</a>
+    <a href="#Statistik">Statistik</a>
+    <a href="#LokasiCuaca">Lokasi & Cuaca</a>
+  </nav>
+</header>
+
+ <!-- MAIN -->
+  <main class="container" id="Dashboard">
+
+    <h1 class="title">Dashboard</h1>
+    <p class="subtitle">Setiap tetes berarti untuk planet kita</p>
+
+    <!-- CARDS -->
+    <section class="cards">
+        <div class="card">
+          <p>Penggunaan Hari Ini</p>
+          <p class="big" id="totalAir">0 L</p>
+      </div>
+
+        <div class="card">
+          <p>Perkiraan Biaya</p>
+          <p class="big" id="biaya">Rp 0</p>
+        </div>
+
+      <div class="card status" id="statusCard">
+        <p>Status</p>
+        <p class="big" id="statusText">-</p>
+      </div>
+
+     </section>
+
+    <!-- CONTENT -->
+    <section class="content">
+
+      <!-- INPUT -->
+      <div class="box">
+        <h3>Catat Penggunaan Air</h3>
+      </div>
+
+      <!-- LOKASI -->
+      <div class="box">
+        <h3>Lokasi & Cuaca</h3>
+
+    
+      </div>
+
+    </section>
+
+    <!-- RIWAYAT -->
+    <section class="history">
+      <h3>Riwayat Penggunaan</h3>
+
+      <div id="emptyState" class="empty-state">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png">
+        <p>Belum ada catatan</p>
+      </div>
+
+      <table id="table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Alat</th>
+            <th>Durasi</th>
+            <th>Air</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+
+    </section>
+
+
+  </main>
+
+</body>
+
+    <!--Kalkulator-->
+
+    <main class="hero" id="Kalkulator">
+    <section class="calculator">
+        <h1 class="calculator__title">Kalkulator Aliran Air</h1>
+            <p class="calculator__subtitle">
+                Perkirakan konsumsi air untuk aktivitas rumah tangga
+            </p>
+
+    <form class="form" id="waterForm">
+
+      <!-- DURASI -->
+      <div class="form__group">
+        <label for="duration">Durasi Pemakaian (menit)</label>
+        <input type="number" id="duration" placeholder="Contoh: 10" required />
+        <small class="form__hint">* Lama penggunaan air</small>
+      </div>
+
+      <!-- DEVICE -->
+      <div class="form__group">
+        <label for="device">Pilih Tipe Perangkat</label>
+        <select id="device">
+          <option value="">-- Pilih --</option>
+          <option value="6">Keran Hemat Air (6 L/menit)</option>
+          <option value="9">Keran Standar (9 L/menit)</option>
+          <option value="12">Shower (12 L/menit)</option>
+          <option value="15">Mesin Cuci (15 L/menit)</option>
+        </select>
+        <small id="deviceHint" class="form__hint">
+          Pilih perangkat atau gunakan debit manual
+        </small>
+      </div>
+
+      <!-- CUSTOM FLOW -->
+      <div class="form__group form__group--optional">
+        <label for="customFlow">Debit Air Manual (Opsional)</label>
+        <input type="number" id="customFlow" placeholder="Contoh: 8" />
+        <small class="form__hint">
+          * Jika diisi, akan menggantikan pilihan perangkat
+        </small>
+      </div>
+
+      <!-- ACTION -->
+      <div class="form__actions">
+        <button type="reset" class="btn btn--secondary">Reset</button>
+        <button type="submit" class="btn btn--primary">Hitung</button>
+      </div>
+
+    </form>
+
+    <!-- RESULT -->
+    <section class="result" id="resultBox">
+      <h3>Hasil Perhitungan</h3>
+      <div class="result__item">
+        <span>Penggunaan Air:</span>
+        <strong id="liter">-</strong>
+      </div>
+      <div class="result__item">
+        <span>Dalam Meter Kubik:</span>
+        <strong id="m3">-</strong>
+      </div>
+      <div class="result__item">
+        <span>Perkiraan Biaya:</span>
+        <strong id="cost">-</strong>
+      </div>
+    </section>
+
+  </section>
+</main>
+
+<!--js.kalkulator-->
+<script>
+  const form = document.getElementById("waterForm");
+  const customInput = document.getElementById("customFlow");
+  const deviceSelect = document.getElementById("device");
+  const hint = document.getElementById("deviceHint");
+
+  // Disable dropdown jika custom diisi
+  customInput.addEventListener("input", function () {
+    if (customInput.value) {
+      deviceSelect.disabled = true;
+      deviceSelect.classList.add("disabled");
+      hint.innerText = "Dinonaktifkan karena menggunakan debit manual";
+    } else {
+      deviceSelect.disabled = false;
+      deviceSelect.classList.remove("disabled");
+      hint.innerText = "Pilih perangkat atau gunakan debit manual";
+    }
+  });
+
+  // Reset state
+  form.addEventListener("reset", function () {
+    deviceSelect.disabled = false;
+    deviceSelect.classList.remove("disabled");
+    hint.innerText = "Pilih perangkat atau gunakan debit manual";
+
+    document.getElementById("resultBox").classList.remove("show");
+  });
+
+  // Hitung
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const duration = document.getElementById("duration").value;
+    const selectedFlow = deviceSelect.value;
+    const customFlow = customInput.value;
+
+    const flow = customFlow ? customFlow : selectedFlow;
+
+    if (!flow) {
+      alert("Pilih perangkat atau isi debit air manual!");
+      return;
+    }
+
+    const liter = duration * flow;
+    const m3 = liter / 1000;
+    const cost = liter * 4;
+
+    document.getElementById("liter").innerText = liter + " L";
+    document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
+    document.getElementById("cost").innerText = "Rp " + cost;
+
+    document.getElementById("resultBox").classList.add("show");
+  });
+</script>
+
+</body>

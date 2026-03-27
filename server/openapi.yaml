@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: PureFlow API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /debit:
+    post:
+      summary: Hitung debit dan simpan ke DB
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                volume:
+                  type: number
+                waktu:
+                  type: number
+                lokasi:
+                  type: string
+      responses:
+        '200':
+          description: Debit berhasil dihitung
+
+  /debit/statistik:
+    get:
+      summary: Ambil semua data debit dan statistik
+      responses:
+        '200':
+          description: Statistik debit
+
+  /debit/estimasi:
+    post:
+      summary: Hitung estimasi konsumsi air
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                durasi:
+                  type: number
+                jenisAlat:
+                  type: string
+      responses:
+        '200':
+          description: Estimasi konsumsi air berhasil dihitung
+
+  /debit/weather:
+    get:
+      summary: Ambil data cuaca dari Weather API
+      parameters:
+        - in: query
+          name: lokasi
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Data cuaca berhasil diambil

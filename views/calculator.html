@@ -1,4 +1,55 @@
-<!-- calculator.html -->
-<section class="calculator">
-<p> Contoh Calculator</p>
-</section>
+<!-- calculator-logic -->
+<script>
+  const form = document.getElementById("waterForm");
+  const customInput = document.getElementById("customFlow");
+  const deviceSelect = document.getElementById("device");
+  const hint = document.getElementById("deviceHint");
+
+  // Disable dropdown jika custom diisi
+  customInput.addEventListener("input", function () {
+    if (customInput.value) {
+      deviceSelect.disabled = true;
+      deviceSelect.classList.add("disabled");
+      hint.innerText = "Dinonaktifkan karena menggunakan debit manual";
+    } else {
+      deviceSelect.disabled = false;
+      deviceSelect.classList.remove("disabled");
+      hint.innerText = "Pilih perangkat atau gunakan debit manual";
+    }
+  });
+
+  // Reset state
+  form.addEventListener("reset", function () {
+    deviceSelect.disabled = false;
+    deviceSelect.classList.remove("disabled");
+    hint.innerText = "Pilih perangkat atau gunakan debit manual";
+
+    document.getElementById("resultBox").classList.remove("show");
+  });
+
+  // Hitung
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const duration = document.getElementById("duration").value;
+    const selectedFlow = deviceSelect.value;
+    const customFlow = customInput.value;
+
+    const flow = customFlow ? customFlow : selectedFlow;
+
+    if (!flow) {
+      alert("Pilih perangkat atau isi debit air manual!");
+      return;
+    }
+
+    const liter = duration * flow;
+    const m3 = liter / 1000;
+    const cost = liter * 4;
+
+    document.getElementById("liter").innerText = liter + " L";
+    document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
+    document.getElementById("cost").innerText = "Rp " + cost;
+
+    document.getElementById("resultBox").classList.add("show");
+  });
+</script>

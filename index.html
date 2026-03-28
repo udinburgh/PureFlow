@@ -202,6 +202,27 @@
     }
   });
 
+  // Highlight menu aktif
+  const sections = document.querySelectorAll("main");
+  const navLinks = document.querySelectorAll(".navbar__menu a");
+
+  window.addEventListener("scroll", () => {
+    let current = "";
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (pageYOffset >= sectionTop - 60) {
+        current = section.getAttribute("id");
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove("active");
+      if (link.getAttribute("href") === "#" + current) {
+        link.classList.add("active");
+      }
+    });
+  });
+
   // Load semua data saat halaman dibuka
   loadDashboard();
   loadWeather();

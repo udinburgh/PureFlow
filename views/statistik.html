@@ -59,7 +59,7 @@
                     </thead>
                     <tbody id="device-details">
                         <tr>
-                            <td>Kran Standar</td>
+                            <td>Keran Standar</td>
                             <td>72.0 L</td>
                             <td>Rp 250 <span class="delete-icon">🗑️</span></td>
                         </tr>
@@ -89,7 +89,7 @@
                 <tbody id="history-data">
                     <tr>
                         <td>28 Mar, 20:30</td>
-                        <td>Kran Standar</td>
+                        <td>Keran Standar</td>
                         <td>5 menit</td>
                         <td>72.0 L <span class="delete-icon">🗑️</span></td>
                     </tr>
@@ -246,55 +246,95 @@ body {
 </style>
 
 <script>
-// 1. Inisialisasi Grafik Lingkaran (Pie Chart)
-const ctxPie = document.getElementById('pieChart').getContext('2d');
-new Chart(ctxPie, {
-    type: 'doughnut', // Menggunakan tipe doughnut agar lebih modern
-    data: {
-        labels: ['Kran', 'Shower', 'Mesin Cuci'],
-        datasets: [{
-            data: [70, 20, 10], // Data dummy (bisa dihubungkan ke kalkulator)
-            backgroundColor: ['#38bdf8', '#818cf8', '#c084fc'],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { position: 'bottom' }
-        },
-        cutout: '70%'
-    }
-});
+async function loadStatistik() {
+  try {
+    const res = await fetch('http://localhost:3000/api/statistik');
+    const data = await res.json();
 
-// 2. Inisialisasi Grafik Garis (Line Chart)
-const ctxLine = document.getElementById('lineChart').getContext('2d');
-new Chart(ctxLine, {
-    type: 'line',
-    data: {
-        labels: ['18 Mar', '19 Mar', '20 Mar', '21 Mar', '22 Mar', '23 Mar', '24 Mar'],
+    // Summary
+    document.getElementById('total-terlacak').innerText = data.totalData + " data";
+    document.getElementById('rata-rata').innerText = data.rataDebit.toFixed(2) + " L/s";
+    document.getElementById('tren').innerText = "+0%"; // placeholder tren
+
+    // Table per lokasi
+    const tbody = document.getElementById('device-details');
+    tbody.innerHTML = "";
+    data.perLokasi.forEach(loc => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${loc.lokasi}</td>
+        <td>${loc.totalData}</td>
+        <td>${loc.rataDebit.toFixed(2)} L/s</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // History data
+    const history = document.getElementById('history-data');
+    history.innerHTML = "";
+    data.data.forEach(d => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${new Date(d.createdAt).toLocaleString()}</td>
+        <td>${d.lokasi || "Unknown"}</td>
+        <td>${d.debit.toFixed(2)} L/s</td>
+      `;
+      history.appendChild(tr);
+    });
+
+    // 1. Grafik Lingkaran (Pie Chart) → pakai data perLokasi
+    const ctxPie = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctxPie, {
+      type: 'doughnut',
+      data: {
+        labels: data.perLokasi.map(l => l.lokasi),
         datasets: [{
-            label: 'Penggunaan Air (Liter)',
-            data: [10, 5, 8, 12, 7, 15, 72],
-            borderColor: '#0ea5e9',
-            backgroundColor: 'rgba(14, 165, 233, 0.1)',
-            fill: true,
-            tension: 0.4, // Membuat garis melengkung halus
-            pointRadius: 5,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#0ea5e9'
+          data: data.perLokasi.map(l => l.rataDebit),
+          backgroundColor: ['#38bdf8', '#818cf8', '#c084fc', '#facc15', '#22c55e'],
+          borderWidth: 0
         }]
-    },
-    options: {
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        cutout: '70%'
+      }
+    });
+
+    // 2. Grafik Garis (Line Chart) → pakai riwayat data
+    const ctxLine = document.getElementById('lineChart').getContext('2d');
+    new Chart(ctxLine, {
+      type: 'line',
+      data: {
+        labels: data.data.map(d => new Date(d.createdAt).toLocaleDateString()),
+        datasets: [{
+          label: 'Debit Air (L/s)',
+          data: data.data.map(d => d.debit),
+          borderColor: '#0ea5e9',
+          backgroundColor: 'rgba(14, 165, 233, 0.1)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 5,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#0ea5e9'
+        }]
+      },
+      options: {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-            y: { beginAtZero: true, grid: { display: false } },
-            x: { grid: { display: false } }
+          y: { beginAtZero: true, grid: { display: false } },
+          x: { grid: { display: false } }
         },
-        plugins: {
-            legend: { display: false }
-        }
-    }
-});
+        plugins: { legend: { display: false } }
+      }
+    });
+
+  } catch (err) {
+    console.error("Error ambil statistik:", err);
+  }
+}
+
+// Load saat halaman dibuka
+loadStatistik();
 </script>

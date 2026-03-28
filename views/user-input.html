@@ -1,4 +1,100 @@
 <!-- user-input.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>PureFlow - Kalkulator Aliran Air</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      background: linear-gradient(180deg, #e0f2fe 0%, #0ea5e9 100%);
+      min-height: 100vh;
+      padding: 30px;
+      color: #334155;
+    }
+    .hero {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+    .calculator__title {
+      color: #0369a1;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .calculator__subtitle {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+    .form__group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .form__group label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form__group input, .form__group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e0f2fe;
+      border-radius: 8px;
+    }
+    .form__hint {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+    .form__actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+    }
+    .btn--primary {
+      background: #22d3ee;
+      color: white;
+    }
+    .btn--secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .result {
+      margin-top: 30px;
+      background: #f1f5f9;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: left;
+    }
+    .result__item {
+      margin-bottom: 10px;
+    }
+    .result__item span {
+      color: #64748b;
+    }
+    .result__item strong {
+      color: #0369a1;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
 <main class="hero">
   <section class="calculator">
     <h1 class="calculator__title">Kalkulator Aliran Air</h1>
@@ -20,10 +116,12 @@
         <label for="device">Pilih Tipe Perangkat</label>
         <select id="device">
           <option value="">-- Pilih --</option>
-          <option value="6">Keran Hemat Air (6 L/menit)</option>
-          <option value="9">Keran Standar (9 L/menit)</option>
-          <option value="12">Shower (12 L/menit)</option>
-          <option value="15">Mesin Cuci (15 L/menit)</option>
+          <option value="Keran Hemat Air">Keran Hemat Air (6 L/menit)</option>
+          <option value="Keran Standar">Keran Standar (9 L/menit)</option>
+          <option value="Shower">Shower (12 L/menit)</option>
+          <option value="Mesin Cuci">Mesin Cuci (15 L/menit)</option>
+          <option value="Dispenser">Dispenser (5 L/menit)</option>
+          <option value="Sprinkler">Sprinkler (20 L/menit)</option>
         </select>
         <small id="deviceHint" class="form__hint">
           Pilih perangkat atau gunakan debit manual
@@ -66,3 +164,83 @@
 
   </section>
 </main>
+
+<script>
+  const form = document.getElementById("waterForm");
+  const customInput = document.getElementById("customFlow");
+  const deviceSelect = document.getElementById("device");
+  const hint = document.getElementById("deviceHint");
+
+  // Disable dropdown jika custom diisi
+  customInput.addEventListener("input", function () {
+    if (customInput.value) {
+      deviceSelect.disabled = true;
+      deviceSelect.classList.add("disabled");
+      hint.innerText = "Dinonaktifkan karena menggunakan debit manual";
+    } else {
+      deviceSelect.disabled = false;
+      deviceSelect.classList.remove("disabled");
+      hint.innerText = "Pilih perangkat atau gunakan debit manual";
+    }
+  });
+
+  // Reset state
+  form.addEventListener("reset", function () {
+    deviceSelect.disabled = false;
+    deviceSelect.classList.remove("disabled");
+    hint.innerText = "Pilih perangkat atau gunakan debit manual";
+    document.getElementById("resultBox").classList.remove("show");
+  });
+
+  // Submit form
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const duration = document.getElementById("duration").value;
+    const selectedDevice = deviceSelect.value;
+    const customFlow = customInput.value;
+
+    // Jika user isi custom flow → hitung manual
+    if (customFlow) {
+      const liter = duration * customFlow;
+      const m3 = liter / 1000;
+      const cost = liter * 4;
+
+      document.getElementById("liter").innerText = liter + " L";
+      document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
+      document.getElementById("cost").innerText = "Rp " + cost;
+      document.getElementById("resultBox").classList.add("show");
+      return;
+    }
+
+    // Kalau pakai dropdown → fetch ke backend
+    if (!selectedDevice) {
+      alert("Pilih perangkat atau isi debit air manual!");
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/api/estimasi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ durasi: duration, jenisAlat: selectedDevice })
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      document.getElementById("liter").innerText = data.konsumsi + " L";
+      document.getElementById("m3").innerText = (data.konsumsi / 1000).toFixed(3) + " m³";
+      document.getElementById("cost").innerText = "Rp " + (data.konsumsi * 4);
+      document.getElementById("resultBox").classList.add("show");
+    } catch (err) {
+      alert("Terjadi error: " + err.message);
+    }
+  });
+</script>
+
+</body>
+</html>

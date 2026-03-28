@@ -379,7 +379,34 @@ h1 {
 }
 </style>
 
+<script>
+      // Ambil cuaca dari backend
+      async function getWeather(lokasi) {
+        try {
+          const res = await fetch(`http://localhost:3000/api/weather?lokasi=${lokasi}`);
+          const data = await res.json();
+
+          if (data.error) {
+            document.getElementById('status-cuaca').textContent = "Error: " + data.error;
+            return;
+          }
+
+          // Binding ke elemen HTML sesuai field backend
+          document.getElementById('status-cuaca').textContent = data.kondisi;
+          document.getElementById('suhu').textContent = data.suhu + "°C";
+          document.getElementById('kelembapan').textContent = data.kelembapan + "%";
+          document.getElementById('angin').textContent = data.angin + " m/s";
+        } catch (err) {
+          document.getElementById('status-cuaca').textContent = "Gagal ambil data cuaca";
+        }
+      }
+
+      // Event tombol lokasi
+      document.getElementById('btn-lokasi').addEventListener('click', () => {
+        const lokasi = document.getElementById('input-lokasi').value || "Jakarta";
+        getWeather(lokasi);
+      });
+    </script>
+
 </body>
 </html>
-
-

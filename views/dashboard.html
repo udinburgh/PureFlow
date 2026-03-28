@@ -78,3 +78,59 @@
   </main>
 
 </body>
+
+<script>
+  // Load statistik dari backend
+  async function loadStatistik() {
+    try {
+      const res = await fetch('http://localhost:3000/api/statistik');
+      const data = await res.json();
+
+      document.getElementById('totalAir').innerText = data.totalDebit.toFixed(2) + " L";
+      document.getElementById('biaya').innerText = "Rp " + (data.totalDebit * 4).toFixed(0);
+      document.getElementById('statusText').innerText = "Aktif";
+
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = "";
+      if (data.data && data.data.length > 0) {
+        document.getElementById('emptyState').style.display = "none";
+        document.getElementById('table').style.display = "table";
+        data.data.forEach(d => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${new Date(d.createdAt).toLocaleString()}</td>
+            <td>${d.jenisAlat || "-"}</td>
+            <td>${d.durasi || "-"} menit</td>
+            <td>${d.konsumsi} L</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    } catch (err) {
+      console.error("Error load statistik:", err);
+    }
+  }
+
+  // Load cuaca dari backend
+  async function loadWeather() {
+    try {
+      const res = await fetch('http://localhost:3000/api/weather?lokasi=Jakarta');
+      const data = await res.json();
+      if (data.error) {
+        document.getElementById('weatherInfo').innerText = "Error: " + data.error;
+        return;
+      }
+      document.getElementById('weatherInfo').innerText =
+        `${data.lokasi}: ${data.kondisi}, Suhu ${data.suhu}°C, Kelembapan ${data.kelembapan}%`;
+    } catch (err) {
+      document.getElementById('weatherInfo').innerText = "Terjadi error: " + err.message;
+    }
+  }
+
+  // Panggil saat halaman dibuka
+  loadStatistik();
+  loadWeather();
+</script>
+
+</body>
+</html>

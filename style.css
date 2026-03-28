@@ -7,15 +7,19 @@
 
 body {
   background: #f5f7fa;
+  min-height: 2000px;
 }
 
 /* NAVBAR */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   padding: 16px 32px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: #c4e8fd;
+  box-shadow: 0 2px 8px rgba(63, 123, 218, 0.05);
 }
 
 .navbar__logo {
@@ -27,15 +31,70 @@ body {
   margin-left: 20px;
   text-decoration: none;
   color: #333;
+  font-weight: bold;
+}
+
+
+.navbar__menu a:hover {
+  color: #0288d1;
 }
 
 /* HERO */
+
+.home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-image: url('img.scr/home-bg.jpeg.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+
+}
+
+.home::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgb(194, 235, 255) 3%, rgba(255, 255, 255, 0)25%);
+}
+
+.home__content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.home__title {
+  font-size: 3em;
+  color: #fdfdfd;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  margin-bottom: 5px;
+}
+
+.home__title span {
+  color: #74d2fe;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+
+.home__subtitle {
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+/* HERO KALKULATOR*/
 .hero {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom, #b3e5fc, #0288d1);
+  background: linear-gradient(to bottom, rgba(194, 235, 255, 0.829), #0288d1);
   padding: 20px;
 }
 

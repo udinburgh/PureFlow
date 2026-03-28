@@ -10,6 +10,11 @@ document.getElementById("debitForm")?.addEventListener("submit", async function 
   const velocity = parseFloat(document.getElementById("velocity").value);
   const lokasi = document.getElementById("lokasi").value || "Unknown";
 
+  if (!area || !velocity || velocity <= 0) {
+    document.getElementById("result").innerText = "Input tidak valid!";
+    return;
+  }
+
   try {
     const response = await fetch(`${BASE_URL}/debit`, {
       method: "POST",
@@ -39,6 +44,16 @@ document.getElementById("waterForm")?.addEventListener("submit", async function 
   const durasi = document.getElementById("duration").value;
   const jenisAlat = document.getElementById("device").value;
 
+  // Validasi input
+  if (!durasi || durasi <= 0) {
+    alert("Durasi harus lebih dari 0!");
+    return;
+  }
+  if (!jenisAlat) {
+    alert("Pilih jenis alat!");
+    return;
+  }
+
   try {
     const response = await fetch(`${BASE_URL}/estimasi`, {
       method: "POST",
@@ -53,6 +68,7 @@ document.getElementById("waterForm")?.addEventListener("submit", async function 
       document.getElementById("m3").innerText = (data.konsumsi / 1000).toFixed(3) + " m³";
       document.getElementById("cost").innerText = "Rp " + (data.konsumsi * 4);
       document.getElementById("resultBox").classList.add("show");
+      loadEstimasi(); // update riwayat setelah simpan
     } else {
       alert(`Error: ${data.error}`);
     }
@@ -60,3 +76,54 @@ document.getElementById("waterForm")?.addEventListener("submit", async function 
     alert(`Terjadi error: ${err.message}`);
   }
 });
+
+// ==========================
+// Load Riwayat Estimasi
+// ==========================
+async function loadEstimasi() {
+  try {
+    const res = await fetch(`${BASE_URL}/estimasi`);
+    const data = await res.json();
+
+    const tbody = document.getElementById("tbody");
+    tbody.innerHTML = "";
+
+    if (data.data && data.data.length > 0) {
+      document.getElementById("emptyState").style.display = "none";
+      document.getElementById("table").style.display = "table";
+
+      data.data.forEach(d => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${new Date(d.createdAt).toLocaleString()}</td>
+          <td>${d.jenisAlat}</td>
+          <td>${d.durasi} menit</td>
+          <td>${d.konsumsi} L</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  } catch (err) {
+    console.error("Error load estimasi:", err);
+  }
+}
+
+// ==========================
+// Load Cuaca
+// ==========================
+async function loadWeather() {
+  try {
+    const res = await fetch(`${BASE_URL}/weather?lokasi=Jakarta`);
+    const data = await res.json();
+    document.getElementById("weatherInfo").innerText =
+      `${data.lokasi}: ${data.kondisi}, Suhu ${data.suhu}°C, Kelembapan ${data.kelembapan}%`;
+  } catch (err) {
+    document.getElementById("weatherInfo").innerText = "Gagal ambil data cuaca";
+  }
+}
+
+// ==========================
+// Load semua saat halaman dibuka
+// ==========================
+loadEstimasi();
+loadWeather();

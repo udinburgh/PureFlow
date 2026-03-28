@@ -7,15 +7,19 @@
 
 body {
   background: #f5f7fa;
+  min-height: 2000px;
 }
 
 /* NAVBAR */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   padding: 16px 32px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: #c4e8fd;
+  box-shadow: 0 2px 8px rgba(63, 123, 218, 0.05);
 }
 
 .navbar__logo {
@@ -27,18 +31,11 @@ body {
   margin-left: 20px;
   text-decoration: none;
   color: #333;
+  font-weight: bold;
 }
 
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(to bottom, #b3e5fc, #0288d1);
-  padding: 20px;
-} {
-  margin-top: 40px;
-  text-align: center;
-  color: #888;
+
+.navbar__menu a:hover {
+  color: #0288d1;
 }
+

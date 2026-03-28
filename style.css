@@ -48,7 +48,7 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background-image: url('img.scr/home-bg.jpeg.jpeg');
+  background-image: url('home-bg.jpeg.jpeg');
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;

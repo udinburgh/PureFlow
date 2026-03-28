@@ -4,6 +4,8 @@ const weatherSchema = new mongoose.Schema({
   lokasi: String,
   kondisi: String,
   suhu: Number,
+  kelembapan: Number,   
+  angin: Number,        
   curahHujan: Number,
   createdAt: { type: Date, default: Date.now }
 });

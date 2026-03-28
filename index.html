@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PureFlow - Dashboard</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar__logo">PureFlow 💧</div>
+  <nav class="navbar__menu">
+    <a href="#Dashboard" class="active">Dashboard</a>
+    <a href="#Kalkulator">Kalkulator</a>
+    <a href="#Statistik">Statistik</a>
+    <a href="#LokasiCuaca">Lokasi & Cuaca</a>
+  </nav>
+</header>
+
+<!-- MAIN -->
+<main class="container" id="Dashboard">
+  <h1 class="title">Dashboard</h1>
+  <p class="subtitle">Setiap tetes berarti untuk planet kita</p>
+
+  <!-- CARDS -->
+  <section class="cards">
+    <div class="card">
+      <p>Penggunaan Hari Ini</p>
+      <p class="big" id="totalAir">0 L</p>
+    </div>
+
+    <div class="card">
+      <p>Perkiraan Biaya</p>
+      <p class="big" id="biaya">Rp 0</p>
+    </div>
+
+    <div class="card status" id="statusCard">
+      <p>Status</p>
+      <p class="big" id="statusText">-</p>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="content">
+    <div class="box">
+      <h3>Catat Penggunaan Air</h3>
+    </div>
+
+    <div class="box" id="LokasiCuaca">
+      <h3>Lokasi & Cuaca</h3>
+      <p id="weatherInfo">Memuat data cuaca...</p>
+    </div>
+  </section>
+
+  <!-- RIWAYAT -->
+  <section class="history">
+    <h3>Riwayat Penggunaan</h3>
+    <div id="emptyState" class="empty-state">
+      <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png">
+      <p>Belum ada catatan</p>
+    </div>
+    <table id="table" style="display:none;">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Alat</th>
+          <th>Durasi</th>
+          <th>Air</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </section>
+</main>
+
+<!-- Kalkulator -->
+<main class="hero" id="Kalkulator">
+  <section class="calculator">
+    <h1 class="calculator__title">Kalkulator Aliran Air</h1>
+    <p class="calculator__subtitle">Perkirakan konsumsi air untuk aktivitas rumah tangga</p>
+
+    <form class="form" id="waterForm">
+      <div class="form__group">
+        <label for="duration">Durasi Pemakaian (menit)</label>
+        <input type="number" id="duration" placeholder="Contoh: 10" required />
+      </div>
+
+      <div class="form__group">
+        <label for="device">Pilih Tipe Perangkat</label>
+        <select id="device">
+          <option value="">-- Pilih --</option>
+          <option value="Keran Hemat Air">Keran Hemat Air (6 L/menit)</option>
+          <option value="Keran Standar">Keran Standar (9 L/menit)</option>
+          <option value="Shower">Shower (12 L/menit)</option>
+          <option value="Mesin Cuci">Mesin Cuci (15 L/menit)</option>
+        </select>
+      </div>
+
+      <div class="form__group">
+        <label for="customFlow">Debit Air Manual (Opsional)</label>
+        <input type="number" id="customFlow" placeholder="Contoh: 8" />
+      </div>
+
+      <div class="form__actions">
+        <button type="reset" class="btn btn--secondary">Reset</button>
+        <button type="submit" class="btn btn--primary">Hitung</button>
+      </div>
+    </form>
+
+    <section class="result" id="resultBox">
+      <h3>Hasil Perhitungan</h3>
+      <div class="result__item"><span>Penggunaan Air:</span> <strong id="liter">-</strong></div>
+      <div class="result__item"><span>Dalam Meter Kubik:</span> <strong id="m3">-</strong></div>
+      <div class="result__item"><span>Perkiraan Biaya:</span> <strong id="cost">-</strong></div>
+    </section>
+  </section>
+</main>
+
+<script>
+  // Dashboard integrasi
+  async function loadDashboard() {
+    try {
+      const res = await fetch('http://localhost:3000/api/statistik');
+      const data = await res.json();
+
+      document.getElementById('totalAir').innerText = data.totalData + " data";
+      document.getElementById('biaya').innerText = "Rp " + (data.rataDebit * 4).toFixed(0);
+      document.getElementById('statusText').innerText = "Aktif";
+      
+      // Riwayat
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = "";
+      if (data.data.length > 0) {
+        document.getElementById('emptyState').style.display = "none";
+        document.getElementById('table').style.display = "table";
+        data.data.forEach(d => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${new Date(d.createdAt).toLocaleString()}</td>
+            <td>${d.lokasi || "-"}</td>
+            <td>${d.durasi || "-"} menit</td>
+            <td>${d.debit.toFixed(2)} L/s</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    } catch (err) {
+      console.error("Error load dashboard:", err);
+    }
+  }
+
+  // Cuaca integrasi
+  async function loadWeather() {
+    try {
+      const res = await fetch('http://localhost:3000/api/weather?lokasi=Jakarta');
+      const data = await res.json();
+      document.getElementById('weatherInfo').innerText =
+        `${data.lokasi}: ${data.kondisi}, Suhu ${data.suhu}°C, Kelembapan ${data.kelembapan}%`;
+    } catch (err) {
+      document.getElementById('weatherInfo').innerText = "Gagal ambil data cuaca";
+    }
+  }
+
+  // Kalkulator integrasi
+  const form = document.getElementById("waterForm");
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
+    const duration = document.getElementById("duration").value;
+    const selectedDevice = document.getElementById("device").value;
+    const customFlow = document.getElementById("customFlow").value;
+
+    if (customFlow) {
+      const liter = duration * customFlow;
+      const m3 = liter / 1000;
+      const cost = liter * 4;
+      document.getElementById("liter").innerText = liter + " L";
+      document.getElementById("m3").innerText = m3.toFixed(3) + " m³";
+      document.getElementById("cost").innerText = "Rp " + cost;
+      document.getElementById("resultBox").classList.add("show");
+      return;
+    }
+
+    if (!selectedDevice) {
+      alert("Pilih perangkat atau isi debit air manual!");
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/api/estimasi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ durasi: duration, jenisAlat: selectedDevice })
+      });
+      const data = await res.json();
+      document.getElementById("liter").innerText = data.konsumsi + " L";
+      document.getElementById("m3").innerText = (data.konsumsi / 1000).toFixed(3) + " m³";
+      document.getElementById("cost").innerText = "Rp " + (data.konsumsi * 4);
+      document.getElementById("resultBox").classList.add("show");
+    } catch (err) {
+      alert("Terjadi error: " + err.message);
+    }
+  });
+
+  // Load semua data saat halaman dibuka
+  loadDashboard();
+  loadWeather();
+</script>
+
+</body>
+</html>

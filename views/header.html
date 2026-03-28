@@ -1,4 +1,33 @@
-<!-- header.html -->
-<header>
-  <p>Contoh Header</p>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PureFlow - Kalkulator Air</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar__logo">PureFlow 💧</div>
+  <nav class="navbar__menu">
+    <a href="#Dashboard" class="active">Dashboard</a>
+    <a href="#Kalkulator">Kalkulator</a>
+    <a href="#Statistik">Statistik</a>
+    <a href="#LokasiCuaca">Lokasi & Cuaca</a>
+  </nav>
 </header>
+
+<script>
+  // Opsional: highlight menu aktif berdasarkan halaman
+  const links = document.querySelectorAll('.navbar__menu a');
+  const currentPage = window.location.pathname.split('/').pop();
+  links.forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+</script>
+
+</body>
+</html>

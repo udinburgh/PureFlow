@@ -1,4 +1,6 @@
 const Debit = require('../models/debitModel');
+const Estimasi = require('../models/estimasiModel');
+const Weather = require('../models/weatherModel');
 const axios = require('axios');
 const apiKey = '2b8de4d0ea57a3a3ecac78023750e757';
 
@@ -10,14 +12,17 @@ exports.getWeather = async (req, res) => {
       `https://api.openweathermap.org/data/2.5/weather?q=${lokasi}&appid=${apiKey}&units=metric`
     );
     const data = response.data;
-    res.json({
+
+    const weatherDoc = await Weather.create({
       lokasi: data.name,
       kondisi: data.weather[0].description,
       suhu: data.main.temp,
-      kelembapan: data.main.humidity,   
-      angin: data.wind.speed,           
+      kelembapan: data.main.humidity,
+      angin: data.wind.speed,
       curahHujan: data.rain ? data.rain['1h'] : 0
     });
+
+    res.json(weatherDoc);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -68,7 +73,7 @@ exports.getStatistik = async (req, res) => {
 };
 
 // POST: estimasi konsumsi air
-exports.hitungAir = (req, res) => {
+exports.hitungAir = async (req, res) => {
   try {
     const { durasi, jenisAlat } = req.body;
     if (!durasi || durasi <= 0 || !jenisAlat) {
@@ -91,7 +96,15 @@ exports.hitungAir = (req, res) => {
     }
 
     const konsumsi = durasi * debitAlat;
-    res.json({ konsumsi, satuan: 'liter', jenisAlat, durasi });
+
+    const estimasiDoc = await Estimasi.create({
+      durasi,
+      jenisAlat,
+      konsumsi,
+      satuan: 'liter'
+    });
+
+    res.json(estimasiDoc);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -154,45 +154,214 @@
   });
 </script>
 
-  <script>
-  // Highlight menu aktif
-  const sections = document.querySelectorAll("main");
-  const navLinks = document.querySelectorAll(".navbar__menu a");
+  <main class="container" id="Statistik">
+        <header class="stat-header">
+            <h1>statistik</h1>
+            <p>Manajemen air berbasis data real-time</p>
+        </header>
 
-  window.addEventListener("scroll", () => {
-    let current = "";
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      if (pageYOffset >= sectionTop - 60) {
-        current = section.getAttribute("id");
-      }
-    });
+        <div class="top-section">
+            <div class="card">
+                <h3>Penggunaan per Perangkat</h3>
+                <div class="chart-wrapper">
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
 
-    navLinks.forEach(link => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === "#" + current) {
-        link.classList.add("active");
-      }
-    });
-  });
+            <div class="card">
+                <div class="table-group">
+                    <div>
+                        <h3>Detail Perangkat</h3>
+                        <table class="stat-table">
+                            <thead>
+                                <tr>
+                                    <th>Perangkat</th>
+                                    <th>Penggunaan</th>
+                                    <th>Biaya</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Kran Standar</td>
+                                    <td>72.0 L (70%)</td>
+                                    <td>Rp 250</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-  // Load semua data saat halaman dibuka
-  loadDashboard();
-  loadWeather();
-  </script>
-  
-  <script>
-  navLinks.forEach(link => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === "#" + current) {
-        link.classList.add("active");
-      }
-    });
+                    <div>
+                        <h3>Riwayat Penggunaan</h3>
+                        <table class="stat-table">
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>Perangkat</th>
+                                    <th>Air</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>28 Mar, 20:30</td>
+                                    <td>Kran Standar</td>
+                                    <td>72.0 L</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  // Load semua data saat halaman dibuka
-  loadDashboard();
-  loadWeather();
-</script>
+        <div class="bottom-section">
+            <div class="card">
+                <h3>Tren Konsumsi Mingguan</h3>
+                <div style="height: 350px; width: 100%;">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Pie Chart
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        new Chart(ctxPie, {
+            type: 'doughnut',
+            data: {
+                labels: ['Kran (70%)', 'Shower (20%)', 'Mesin Cuci (10%)'],
+                datasets: [{
+                    data: [70, 20, 10],
+                    backgroundColor: ['#38bdf8', '#818cf8', '#c084fc'],
+                    borderWidth: 6,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 25, font: { size: 14 } } }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Line Chart
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+                datasets: [{
+                    label: 'Liter per Hari',
+                    data: [45, 52, 48, 70, 65, 80, 72],
+                    borderColor: '#0ea5e9',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 3
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+
+<main class="hero-section" id="LokasiCuaca">
+        <h1>Lokasi & Cuaca</h1>
+        <p class="subtitle">Kondisi lokal yang mempengaruhi ketersediaan air</p>
+
+        <div class="content-wrapper">
+            <div class="card card-weather">
+                <h3>Lokasi & Cuaca</h3>
+                <p class="card-desc">Kondisi lokal yang mempengaruhi ketersediaan air</p>
+                
+                <button id="btn-lokasi" class="btn-primary">Aktifkan layanan lokasi</button>
+
+                <div class="input-group">
+                    <label>Lokasi anda saat ini</label>
+                    <input type="text" placeholder="Masukkan manual" id="input-lokasi">
+                    <small>*Masukkan kota atau kode area ini</small>
+                </div>
+
+                <div class="weather-info-box">
+                    <div class="weather-main">
+                        <span class="weather-icon">💧</span>
+                        <span id="status-cuaca">Cerah Berawan</span>
+                    </div>
+                    
+                    <div class="weather-details">
+                        <div class="detail-item"><span>Suhu:</span> <strong id="suhu"></strong></div>
+                        <div class="detail-item"><span>Kelembapan:</span> <strong id="kelembapan"></strong></div>
+                        <div class="detail-item"><span>Angin:</span> <strong id="angin"></strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-tips">
+                <h3><span class="icon-list">📋</span> Tips Menghemat Air</h3>
+                <p class="card-desc">Praktik harian untuk penggunaan air berkelanjutan</p>
+                
+                <p><strong>Lakukan ini</strong></p>
+                <ul class="tips-list">
+                    <li>Gunakan air secukupnya saat mandi</li>
+                    <li>Matikan keran saat tidak digunakan</li>
+                    <li>Gunakan mesin cuci dengan kapasitas penuh</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-container">
+        <div class="footer-content">
+            <div class="footer-section brand-section">
+                <div class="logo-wrapper">
+                    <h2 class="brand-name">PureFlow</h2>
+                    <span class="drop-icon">💧</span>
+                </div>
+                <p class="description">
+                    Platform pemantauan air premium yang mendukung SDG 6 PBB: Air Bersih dan Sanitasi. 
+                    Lacak, analisis, dan kurangi konsumsi air Anda dengan elegan.
+                </p>
+            </div>
+
+            <div class="footer-section links-section">
+                <h3>Tautan Cepat</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">kalkulator</a></li>
+                    <li><a href="#">statistik</a></li>
+                    <li><a href="#">Lokasi & Cuaca</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section sdg-section">
+                <h3>SDG 6 PBB</h3>
+                <div class="quote-box">
+                    <p>"Memastikan ketersediaan dan pengelolaan air yang berkelanjutan serta sanitasi untuk semua."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>💧 2026 Pure Flow. Mendukung pengelolaan air berkelanjutan secara global. 💧</span>
+        </div>
+    </footer>
 
 </body>
 </html>

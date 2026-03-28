@@ -1,14 +1,17 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
-}
-
-body {
-  background: #f5f7fa;
-  min-height: 2000px;
-}
+*{
+   margin: 0;
+   padding: 0; 
+   box-sizing: border-box;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+   background: linear-gradient(180deg, #e0f2fe 0%, #0ea5e9 100%);
+   min-height: 100vh; 
+   padding-bottom: 50px;
+   flex-direction: column; 
+   color: #334155; 
+  }
 
 /* NAVBAR */
 .navbar {
@@ -97,6 +100,7 @@ body {
   background: linear-gradient(to bottom, rgba(194, 235, 255, 0.829), #0288d1);
   padding: 20px;
 }
+
 
 /* CARD */
 .calculator {
@@ -237,4 +241,322 @@ select.disabled {
   .calculator {
     padding: 20px;
   }
+}
+
+/* Statistic */
+
+ /* Lebarkan kontainer utama agar tidak terlalu menengah/sempit */
+        .container {
+            max-width: 1400px; /* Diperlebar dari sebelumnya */
+            margin: 0 auto;
+            padding: 40px 30px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .stat-header { text-align: center; margin-bottom: 40px; }
+        .stat-header h1 { color: #0369a1; font-size: 3rem; text-transform: lowercase; }
+
+        /* Grid Atas: Kiri (Diagram) & Kanan (Tabel) */
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr; /* Sisi kanan dibuat lebih lebar untuk tabel */
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+
+        .card h3 { color: #0369a1; margin-bottom: 20px; font-size: 1.3rem; }
+
+        /* Tabel Grouping */
+        .table-group {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .stat-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stat-table th { 
+            text-align: left; 
+            padding: 15px; 
+            border-bottom: 2px solid #f1f5f9; 
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .stat-table td { 
+            padding: 15px; 
+            border-bottom: 1px solid #f8fafc;
+            font-size: 1rem;
+        }
+
+        /* Diagram Lingkaran */
+        .chart-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .chart-container { width: 100%; max-width: 400px; }
+
+        /* Grafik Bawah */
+        .bottom-section { width: 100%; margin-top: 10px; }
+
+/* Hero Section Geolokasi*/
+.hero-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(to bottom, rgba(194, 235, 255, 0.829), #0288d1);
+}
+
+h1 {
+    color: #2870b9;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #0369a1;
+    margin-bottom: 40px;
+}
+
+/* Layout Kartu */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    width: 450px;
+    text-align: left;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    color: #0369a1;
+    margin-bottom: 5px;
+}
+
+.card-desc {
+    font-size: 0.8rem;
+    color: #7dd3fc;
+    margin-bottom: 20px;
+}
+
+/* Button & Input */
+.btn-primary {
+    width: 100%;
+    background-color: #22d3ee;
+    border: none;
+    padding: 12px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0f2fe;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.input-group small {
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+/* Weather Display */
+.weather-info-box {
+    margin-top: 20px;
+}
+
+.weather-main {
+    background-color: #e0f2fe;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.weather-details {
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+/* Tips List */
+.tips-list {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.tips-list li {
+    background-color: #e0f2fe;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.container { 
+    max-width: 1000px;
+    margin: 0 auto; 
+    padding: 0 20px; 
+    text-align: center;
+    
+   
+    flex: 1; 
+    width: 100%;
+}
+
+.footer-container {
+    background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
+    width: 100%;
+    margin-top: auto;
+    padding: 40px 60px 20px 60px;
+    color: #334155;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section {
+    flex: 1;
+}
+
+/* Brand Section */
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.brand-name {
+    color: #0ea5e9;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.drop-icon {
+    font-size: 24px;
+}
+
+.description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #64748b;
+}
+
+/* Links Section */
+.footer-section h3 {
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 15px;
+}
+
+.links-section ul {
+    list-style: none;
+}
+
+.links-section ul li {
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 20px;
+}
+
+/* Dot biru sebelum link */
+.links-section ul li::before {
+    content: "•";
+    color: #0ea5e9;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.links-section ul li a {
+    text-decoration: none;
+    color: #64748b;
+    font-size: 15px;
+}
+
+/* SDG Section */
+.quote-box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #38bdf8;
+}
+
+.quote-box p {
+    font-style: italic;
+    font-size: 14px;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
+/* Copyright Section */
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(56, 189, 248, 0.2);
+    padding-top: 20px;
+    font-size: 13px;
+    color: #0ea5e9;
+    font-weight: 500;
+}
+
+/* Responsif untuk layar HP */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+    }
 }

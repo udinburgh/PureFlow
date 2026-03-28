@@ -2,14 +2,16 @@ openapi: 3.0.0
 info:
   title: PureFlow API
   version: 1.0.0
+  description: API untuk monitoring debit air, estimasi konsumsi, statistik, dan data cuaca
 
 servers:
   - url: http://localhost:3000/api
 
 paths:
-  /debit:
+  /:
     post:
-      summary: Hitung debit dan simpan ke DB
+      summary: Hitung debit air
+      description: Menghitung debit air berdasarkan volume dan waktu, lalu menyimpan ke database.
       requestBody:
         required: true
         content:
@@ -19,24 +21,38 @@ paths:
               properties:
                 volume:
                   type: number
+                  example: 10
                 waktu:
                   type: number
+                  example: 5
                 lokasi:
                   type: string
+                  example: Jakarta
       responses:
         '200':
-          description: Debit berhasil dihitung
+          description: Hasil perhitungan debit
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  debit:
+                    type: number
+                    example: 2
+                  status:
+                    type: string
+                    example: ok
+                  saved:
+                    type: boolean
+                    example: true
+                  lokasi:
+                    type: string
+                    example: Jakarta
 
-  /debit/statistik:
-    get:
-      summary: Ambil semua data debit dan statistik
-      responses:
-        '200':
-          description: Statistik debit
-
-  /debit/estimasi:
+  /estimasi:
     post:
-      summary: Hitung estimasi konsumsi air
+      summary: Estimasi konsumsi air
+      description: Menghitung konsumsi air berdasarkan durasi dan jenis alat.
       requestBody:
         required: true
         content:
@@ -46,21 +62,96 @@ paths:
               properties:
                 durasi:
                   type: number
+                  example: 10
                 jenisAlat:
                   type: string
+                  example: Keran Standar
       responses:
         '200':
-          description: Estimasi konsumsi air berhasil dihitung
+          description: Hasil estimasi konsumsi air
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  konsumsi:
+                    type: number
+                    example: 90
+                  satuan:
+                    type: string
+                    example: liter
+                  jenisAlat:
+                    type: string
+                    example: Keran Standar
+                  durasi:
+                    type: number
+                    example: 10
 
-  /debit/weather:
+  /statistik:
     get:
-      summary: Ambil data cuaca dari Weather API
+      summary: Statistik debit air
+      description: Mengambil data debit air dari database dan menghitung rata-rata per lokasi.
+      responses:
+        '200':
+          description: Statistik debit air
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalData:
+                    type: number
+                    example: 5
+                  rataDebit:
+                    type: number
+                    example: 2.5
+                  perLokasi:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lokasi:
+                          type: string
+                          example: Jakarta
+                        totalData:
+                          type: number
+                          example: 3
+                        rataDebit:
+                          type: number
+                          example: 2.7
+                  data:
+                    type: array
+                    items:
+                      type: object
+
+  /weather:
+    get:
+      summary: Data cuaca
+      description: Mengambil data cuaca dari OpenWeather API berdasarkan lokasi.
       parameters:
         - in: query
           name: lokasi
           schema:
             type: string
           required: true
+          example: Jakarta
       responses:
         '200':
-          description: Data cuaca berhasil diambil
+          description: Data cuaca
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lokasi:
+                    type: string
+                    example: Jakarta
+                  kondisi:
+                    type: string
+                    example: clear sky
+                  suhu:
+                    type: number
+                    example: 30
+                  curahHujan:
+                    type: number
+                    example: 0

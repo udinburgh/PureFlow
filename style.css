@@ -37,9 +37,145 @@ body {
   align-items: center;
   background: linear-gradient(to bottom, #b3e5fc, #0288d1);
   padding: 20px;
-} 
-.hero h1 {
-  margin-top: 40px;
+}
+
+/* CARD */
+.calculator {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
   text-align: center;
-  color: #888;
+}
+
+.calculator__title {
+  color: #0288d1;
+  margin-bottom: 8px;
+}
+
+.calculator__subtitle {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+/* FORM */
+.form__group {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.form__group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form__group input,
+.form__group select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* OPTIONAL */
+.form__group--optional {
+  background: #f9fcff;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px dashed #b3e5fc;
+}
+
+/* HINT */
+.form__hint {
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+  display: block;
+}
+
+/* INPUT NUMBER */
+input[type="number"] {
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* FOCUS */
+.form__group input:focus,
+.form__group select:focus {
+  outline: none;
+  border-color: #0288d1;
+  box-shadow: 0 0 0 2px rgba(2, 136, 209, 0.2);
+}
+
+/* CUSTOM ACTIVE */
+#customFlow:not(:placeholder-shown) {
+  border-color: #26c6da;
+  background: #f0fbff;
+}
+
+/* DISABLED */
+select.disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* BUTTON */
+.form__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: #0288d1;
+  color: white;
+}
+
+.btn--secondary {
+  background: #e0e0e0;
+}
+
+/* RESULT */
+.result {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #e1f5fe;
+  display: none;
+}
+
+.result.show {
+  display: block;
+}
+
+.result__item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .navbar__menu {
+    display: none;
+  }
+
+  .calculator {
+    padding: 20px;
+  }
 }

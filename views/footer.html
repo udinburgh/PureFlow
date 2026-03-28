@@ -167,3 +167,17 @@ body {
     }
 }
 </style>
+
+<script>
+    // Highlight link aktif di footer sesuai halaman
+    const links = document.querySelectorAll('.links-section a');
+    const currentPage = window.location.pathname.split('/').pop();
+    links.forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+
+</body>
+</html>

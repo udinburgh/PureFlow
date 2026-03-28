@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 // gunakan routes untuk debit
-app.use('/api/debit', debitRoutes);
+app.use('/api', debitRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

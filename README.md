@@ -59,3 +59,11 @@ Notes API Documentation : Jika ingin check di Postman impor saja file openapi.ya
 
 Format Data: Semua request dan response menggunakan format JSON.
 Case Sensitivity: Perhatikan penulisan variabel (misal: jenisAlat, bukan jenisalat).
+
+TUTORIAL AGAR WEB INI BERJALAN
+
+1. cd PureFlow
+2. cd server
+3. npm start
+
+setelah melakukan ini API dan MongoDB telah terkoneksi
